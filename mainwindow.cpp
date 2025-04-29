@@ -41,14 +41,14 @@ void MainWindow::onImportSucceeded(const QString &experimentName,const QStringLi
     // 显示消息框
     QMessageBox::information(this, "导入成功", message);
 
-    //创建VideoPlayer对象
-    if (!m_videoPlayer){
-        m_videoPlayer = new VideoPlayer(this);
-        m_videoPlayer->setVideoPlayer(ui->videoWidget);
-    }
+    // 一步完成所有初始化
+    m_videoPlayer = new VideoPlayer(this, ui->videoWidget, videoList);
 
-    //直接第一个播放视频
-    m_videoPlayer->loadAndPlay(videoList.first());
+    // 连接按钮
+    connect(ui->singelViewButton, &QPushButton::clicked, m_videoPlayer, &VideoPlayer::playSingle);
+    connect(ui->mainViewButton, &QPushButton::clicked, m_videoPlayer, &VideoPlayer::playMain);
+    connect(ui->globalViewButton, &QPushButton::clicked, m_videoPlayer, &VideoPlayer::playGlobal);
+
 
     // 更新UI以反映新的数据
     updateUI();
